@@ -13,6 +13,7 @@ pytrends
 
 **Requirements**
 * Written for Python 3.3, probably works for 3.x.
+* Modified for Python 2.7 (pytrends.py2GTrends)
 * Requires a google account to use.
 
 ## Connect to Google
