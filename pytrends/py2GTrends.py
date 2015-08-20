@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import codecs
 import copy
@@ -120,6 +122,14 @@ class pyGTrends(object):
         return self.raw_data
 
 
+def fix_pct(line):
+    '''
+    '寿司,+1,300%' -> '寿司,+1300%'
+    '''
+    modifier = lambda m: m.group(0).replace(',', '')
+    return re.sub(r'[+-]\d{1,3}(,\d{3})+%', modifier, line)
+
+
 def parse_data(data):
     """
     Parse data in a Google Trends CSV export (as `str`) into JSON format
@@ -147,6 +157,7 @@ def parse_data(data):
                 parsed_data['info'] = {'source': source, 'query': query,
                                        'geo': geo, 'period': period}
         else:
+            chunk = fix_pct(chunk)
             rows = [row for row in csv.reader(chunk.encode('utf-8').split('\n')) if row]
             rows = [[val.decode('utf-8') for val in row] for row in rows]
             if not rows:
